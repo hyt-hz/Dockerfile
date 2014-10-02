@@ -1,0 +1,35 @@
+# to build a CentOS6 with GCC, GDB and python27
+FROM centos:centos6
+MAINTAINER Yiting Huang <hyt1981@gmail.com>
+
+RUN mkdir -p /root/install
+WORKDIR /root/install
+
+RUN yum -y install gcc gdb python
+RUN yum -y install wget tar
+
+# to build python27
+RUN yum -y install zlib-devel readline-devel ncurses-devel openssl-devel gdbm-devel sqlite-devel bzip2-devel
+RUN wget https://www.python.org/ftp/python/2.7.8/Python-2.7.8.tgz
+RUN tar -zxvf Python-2.7.8.tgz 
+WORKDIR Python-2.7.8
+RUN ./configure --prefix=/opt/python27 --with-doc-strings --enable-shared
+RUN make
+RUN make install
+RUN echo "/opt/python27/lib/" > /etc/ld.so.conf.d/python27.conf
+RUN ldconfig
+WORKDIR /root/install
+RUN rm -rf Python-2.7.8
+RUN rm -f Python-2.7.8.tgz
+
+# prepare pip and setuptools for both python26 and python27
+RUN wget https://bootstrap.pypa.io/get-pip.py
+RUN mkdir -p /root/.pip
+RUN echo '[global]' > /root/.pip/pip.conf
+RUN echo 'index-url = http://pypi.douban.com/simple' >> /root/.pip/pip.conf
+RUN python get-pip.py
+RUN pip install virtualenv
+RUN mkdir /root/pyenv26
+RUN /opt/python27/bin/python get-pip.py
+RUN /opt/python27/bin/pip install virtualenv
+RUN mkdir /root/pyenv27
