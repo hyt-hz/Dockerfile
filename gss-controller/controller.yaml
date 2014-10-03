@@ -1,0 +1,36 @@
+# ip:port to listen to for incomming request and status report
+listen: 0.0.0.0:9000
+
+node_id: ctrl
+
+# self IDC
+idc: center
+
+# toggle functionality on/off
+# storage: cluster object storage, we need DB to support this function
+storage: False
+# conversion of video file
+conv: True
+# hep: high education press style conversion and CDN
+# it uses NFS for file storage, and do not require DB
+#hep: True
+#raw_path_prefix: /gensee/nginx/html/raw/
+#raw_url_prefix: http://192.168.1.222/raw/
+
+# self domain, used for download link calculation
+# domain = gensee.com
+
+# DB configuration
+#mongo:
+#    host: 127.0.0.1:27017
+#    replSet: gss
+#    db: gss
+
+# redis conf
+# redis_sentinel: 192.168.1.222:xxxx
+redis: redis:6379
+
+# 3rd party CDN
+#cdn_3rd:
+#    - www.chinanetcenter.com
+
