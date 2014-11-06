@@ -1,0 +1,38 @@
+# to build a CentOS6 with GCC, GDB and python27
+# to build it
+# docker build --rm -t hythz/centos5:base .
+# to launch
+# docker run -ti -v /home/core/src/rt:/root/src --name gss-debug hythz/centos:base /bin/bash
+
+FROM centos:centos6
+MAINTAINER Yiting Huang <hyt1981@gmail.com>
+
+# install gcc gdb and build python27
+RUN yum -y install make gcc gcc-c++ gdb wget tar && \
+  yum -y install zlib-devel readline-devel ncurses-devel openssl-devel gdbm-devel sqlite-devel bzip2-devel && \
+  mkdir -p /root/install && \
+  cd /root/install && \
+  wget https://www.python.org/ftp/python/2.7.8/Python-2.7.8.tgz && \
+  tar -zxvf Python-2.7.8.tgz && \
+  cd Python-2.7.8 && \
+  ./configure --prefix=/opt/python27 --with-doc-strings --enable-shared && \
+  make && \
+  make install && \
+  echo "/opt/python27/lib/" > /etc/ld.so.conf.d/python27.conf && \
+  ldconfig && \
+  cd /root && \
+  rm -rf /root/install
+
+# prepare pip and setuptools for both python26 and python27
+RUN mkdir -p /root/.pip && \
+  echo '[global]' > /root/.pip/pip.conf && \
+  echo 'index-url = http://pypi.douban.com/simple' >> /root/.pip/pip.conf && \
+  wget --no-check-certificate https://bootstrap.pypa.io/get-pip.py && \
+  python get-pip.py && \
+  /opt/python27/bin/python get-pip.py && \
+  rm -f get-pip.py && \
+  cd root && \
+  pip install virtualenv && mkdir pyenv && \
+  /opt/python27/bin/pip install virtualenv && mkdir pyenv27
+
+WORKDIR /root

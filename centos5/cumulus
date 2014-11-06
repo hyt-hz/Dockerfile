@@ -1,0 +1,21 @@
+# to build a CentOS5 with cumulus installed
+# docker build --rm -t hythz/centos5:cumulus .
+# to launch
+# docker run -ti -p 1935:1935/udp --name cumulus hythz/centos5:cumulus /bin/bash
+
+FROM hythz/centos5:base
+MAINTAINER Yiting Huang <hyt1981@gmail.com>
+
+# install gcc gdb and build python27
+RUN yum -y install unzip && \
+  cd /root && \
+  wget http://luajit.org/download/LuaJIT-2.0.3.tar.gz && \
+  tar zxvf LuaJIT-2.0.3.tar.gz && \
+  cd LuaJIT-2.0.3 && make && make install && cd .. && rm -rf LuaJIT-2.0.3 && \
+  wget http://pocoproject.org/releases/poco-1.4.7/poco-1.4.7.tar.gz && \
+  tar zxvf poco-1.4.7.tar.gz && \
+  cd poco-1.4.7 && make && make install && cd .. && rm -rf poco-1.4.7 && \
+  wget https://github.com/OpenRTMFP/Cumulus/archive/master.zip && \
+  unzip master && mv Cumulus-master/ cumulus && \
+  cd cumulus/CumulusLib/ && make && cd ../../ && \
+  cd cumulus/CumulusServer/ && make && cd ../../
