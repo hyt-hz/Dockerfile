@@ -1,5 +1,5 @@
-# docker build --tag hythz/shadowsocks .
-# docker run -d -p 9090:9090 --name ssserver hythz/shadowsocks
+# docker build --tag hythz/shadowsocks:1.0 .
+# docker run -d -p 9090:9090 --name ssserver --restart=always hythz/shadowsocks:1.0
 
 FROM centos:centos7
 MAINTAINER Yiting Huang <hyt1981@gmail.com>
