@@ -10,6 +10,7 @@ MAINTAINER Yiting Huang <hyt1981@gmail.com>
 # install gcc gdb and build python27
 RUN yum -y install make gcc gcc-c++ gdb wget tar && \
   yum -y install zlib-devel readline-devel ncurses-devel openssl-devel gdbm-devel sqlite-devel bzip2-devel && \
+  yum clean packages && yum clean headers && yum clean metadata && yum clean all && \
   mkdir -p /root/install && \
   cd /root/install && \
   wget https://www.python.org/ftp/python/2.7.8/Python-2.7.8.tgz && \
@@ -26,7 +27,7 @@ RUN yum -y install make gcc gcc-c++ gdb wget tar && \
 # prepare pip and setuptools for python27
 RUN mkdir -p /root/.pip && \
   echo '[global]' > /root/.pip/pip.conf && \
-  echo 'index-url = http://pypi.douban.com/simple' >> /root/.pip/pip.conf && \
+  echo 'index-url = http://mirrors.aliyun.com/pypi/simple' >> /root/.pip/pip.conf && \
   wget --no-check-certificate https://bootstrap.pypa.io/get-pip.py && \
   /opt/python27/bin/python get-pip.py && \
   rm -f get-pip.py && \
