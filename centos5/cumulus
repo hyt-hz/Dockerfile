@@ -8,6 +8,7 @@ MAINTAINER Yiting Huang <hyt1981@gmail.com>
 
 # install gcc gdb and build python27
 RUN yum -y install unzip && \
+  yum clean packages && yum clean headers && yum clean metadata && yum clean all && \
   cd /root && \
   wget http://luajit.org/download/LuaJIT-2.0.3.tar.gz && \
   tar zxvf LuaJIT-2.0.3.tar.gz && \
